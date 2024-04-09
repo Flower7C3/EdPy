@@ -3,13 +3,17 @@
 set -e
 
 input_program_file_path="$1"
+if [[ -z "$input_program_file_path" ]]; then
+    printf "input file not defined\n"
+    exit 8
+fi
 if [[ ! -f "$input_program_file_path" ]]; then
-    printf "file %s not found\n" "$input_program_file_path"
+    printf "input file '%s' not found\n" "$input_program_file_path"
     exit 9
 fi
-EDISON_PYTHON_LIB_PATH="$(dirname "$0")/src/"
+EDISON_PYTHON_LIB_PATH="$(dirname "$0")/EdPy-src/"
 
-printf "compiling %s file\n" "$input_program_file_path"
+printf "compiling '%s' file\n" "$input_program_file_path"
 trap "echo 'cleanup'; rm EdPy.log" EXIT
 status=$(python2 "${EDISON_PYTHON_LIB_PATH}EdPy.py" "${EDISON_PYTHON_LIB_PATH}en_lang.json" "$input_program_file_path")
 output_sound_file_path=$(echo "$status" | jq -r ".wavFilename")

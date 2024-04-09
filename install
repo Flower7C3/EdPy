@@ -39,16 +39,16 @@ fi
 
 echo "=== Create destination directory ==="
 sudo chown -R $(whoami) /usr/local/bin
-mkdir -p "${INSTALLATION_PATH}EdPy/lib/"
+mkdir -p "${INSTALLATION_PATH}EdPy-src/lib/"
 
 echo "=== Download sources ==="
 for file in "${SOURCE_FILES[@]}"; do
     echo "- $file"
-    curl -fsSL "${REPO_URL}master/src/$file?r=${RANDOM}" -o "${INSTALLATION_PATH}EdPy/${file}"
+    curl -fsSL "${REPO_URL}master/src/$file?r=${RANDOM}" -o "${INSTALLATION_PATH}EdPy-src/${file}"
 done
 
 echo "=== Download compiler ==="
 curl -fsSL "${REPO_URL}master/edpy?r=${RANDOM}" -o "${INSTALLATION_PATH}edpy"
-chmod +x "${INSTALLATION_PATH}/edpy"
+chmod +x "${INSTALLATION_PATH}edpy"
 
 echo "=== Done ==="
