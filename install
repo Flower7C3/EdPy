@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+
+set -e
+
+REPO_URL="https://raw.githubusercontent.com/Flower7C3/EdPy/"
+INSTALLATION_PATH="/usr/local/bin/"
+PYTHON_VERSION=2.7.18
+
+SOURCE_FILES=(
+    EdPy.py
+    en_lang.json
+    lib/__init__.py
+    lib/audio.py
+    lib/compiler.py
+    lib/edpy_code.py
+    lib/edpy_values.py
+    lib/hl_parser.py
+    lib/io.py
+    lib/optimiser.py
+    lib/parser.py
+    lib/program.py
+    lib/token_assembler.py
+    lib/token_bits.py
+    lib/tokens.py
+    lib/util.py
+)
+
+echo "=== Install dependencies ==="
+brew install pyenv play jq
+# shellcheck disable=SC2143
+if ! pyenv versions | grep -q $PYTHON_VERSION; then
+    pyenv install $PYTHON_VERSION
+    export PATH="$(pyenv root)/shims:${PATH}"
+    echo 'PATH=$(pyenv root)/shims:$PATH' >>~/.zshrc
+    echo 'PATH=$(pyenv root)/shims:$PATH' >>~/.bashrc
+    pyenv init
+    pyenv global $PYTHON_VERSION
+fi
+
+echo "=== Create destination directory ==="
+sudo chown -R $(whoami) /usr/local/bin
+mkdir -p "${INSTALLATION_PATH}EdPy/lib/"
+
+echo "=== Download sources ==="
+for file in "${SOURCE_FILES[@]}"; do
+    echo "- $file"
+    curl -fsSL "${REPO_URL}master/src/$file?r=${RANDOM}" -o "${INSTALLATION_PATH}EdPy/${file}"
+done
+
+echo "=== Download compiler ==="
+curl -fsSL "${REPO_URL}master/edpy?r=${RANDOM}" -o "${INSTALLATION_PATH}edpy"
+chmod +x "${INSTALLATION_PATH}/edpy"
+
+echo "=== Done ==="

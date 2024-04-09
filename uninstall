@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+set -e
+
+INSTALLATION_PATH="/usr/local/bin/"
+
+echo "=== Remove sources and compiler ==="
+rm -rvf "${INSTALLATION_PATH}EdPy" "${INSTALLATION_PATH}/edpy"
+
+echo "=== Done ==="
